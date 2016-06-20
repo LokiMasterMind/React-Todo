@@ -4,6 +4,8 @@ var TodoList=require('TodoList');
 var TodoAdd=require('TodoAdd');
 var TodoSearch=require('TodoSearch');
 
+var uuid=require('uuid');
+
 var TodoApp=React.createClass({
   getInitialState:function(){
     return{
@@ -11,26 +13,39 @@ var TodoApp=React.createClass({
       searchText:"",
       todos:[
         {
-          id:1,
-          text:"First Todo"
+          id:uuid(),
+          text:"First Todo",
+          completed:false
         },
         {
-          id:2,
-          text:"Second Todo"
+          id:uuid(),
+          text:"Second Todo",
+          completed:true
         },
         {
-          id:3,
-          text:"Third Todo"
+          id:uuid(),
+          text:"Third Todo",
+          completed:false
         },
         {
-          id:4,
-          text:"Fourth Todo"
+          id:uuid(),
+          text:"Fourth Todo",
+          completed:false
         }
       ]
     }
   },
   handleAddTodo:function(text){
-    alert("text: "+text)
+      this.setState({
+        todos:[
+          ...this.state.todos,
+          {
+            id:uuid(),
+            text:text,
+            completed:false
+          }
+        ]
+      })
   },
   handleSearch:function(showCompleted,searchText){
     this.setState({
@@ -38,12 +53,21 @@ var TodoApp=React.createClass({
       searchText:searchText
     })
   },
+  handleToggle:function(id){
+    var updatedTodo=this.state.todos.map((todo)=>{
+      if(todo.id === id){
+        todo.completed=!todo.completed;
+      }
+      return todo;
+    });
+    this.setState({todos:updatedTodo});
+  },
   render:function(){
     var {todos}=this.state;
     return(
       <div>
         <TodoSearch onSearch={this.handleSearch}/>
-        <TodoList todos={todos}/>
+        <TodoList todos={todos} onToggle={this.handleToggle}/>
         <TodoAdd submitForm={this.handleAddTodo}/>
       </div>
     );
