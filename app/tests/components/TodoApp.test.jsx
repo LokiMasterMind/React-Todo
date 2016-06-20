@@ -20,6 +20,5 @@ describe('TodoApp', () => {
 
     expect(todo.state.todos[0].text).toBe(todoText);
   });
-
-  it()
+  
 });
